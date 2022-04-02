@@ -1,0 +1,9 @@
+$theme-color: #409eff;
+$default-font-color: #646464; //默认文字颜色
+$font-high-color: #409eff; //高亮颜色
+$crumb-height: 55px;
+
+//消息提示自定义类
+.elmessage-index {
+  z-index: 3000 !important;
+}
