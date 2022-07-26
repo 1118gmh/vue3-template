@@ -5,9 +5,6 @@
 </script>
 
 <template>
-  <router-link tag="div" to="/login">登录</router-link>
-  <router-link to="/index">首页</router-link>
-
   <router-view></router-view>
 </template>
 
@@ -15,5 +12,9 @@
 html,
 body {
   margin: 0;
+}
+.app {
+  width: 100vw;
+  height: 100vh;
 }
 </style>

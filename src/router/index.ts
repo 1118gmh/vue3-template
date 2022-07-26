@@ -10,25 +10,35 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/login"
+      redirect: "/start"
     },
     {
-      path: "/login",
-      name: "Login",
-      component: () => import("@/views/Login.vue"),
+      path: "/start",
+      name: "Start",
+      component: () => import("@/views/Start.vue"),
     },
     {
-      path: "/index",
-      name: "Index",
-      component: () => import("@/views/Index.vue"),
-      children: [
-        {
-          path: "children1",
-          name: "children1",
-          component: () => import("@/views/children1/children1.vue"),
-        },
-      ]
-    }
+      path: "/single",
+      name: "Single",
+      component: () => import("@/views/Single.vue"),
+    },
+    {
+      path: "/answer",
+      name: "Answer",
+      component: () => import("@/views/Answer.vue"),
+    },
+    // {
+    //   path: "/index",
+    //   name: "Index",
+    //   component: () => import("@/views/Index.vue"),
+    //   children: [
+    //     {
+    //       path: "children1",
+    //       name: "children1",
+    //       component: () => import("@/views/children1/children1.vue"),
+    //     },
+    //   ]
+    // }
   ],
 });
 Object.values(hooks).forEach(hook => {
