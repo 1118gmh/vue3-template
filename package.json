@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "dev": "vite --host 0.0.0.0",
+    "build-tsc": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "build": "vite build"
+    
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "element-plus": "^2.1.7",
     "pinia": "^2.0.13",
     "vite-plugin-element-plus": "0.0.9",
     "vue": "^3.2.25",

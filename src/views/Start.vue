@@ -25,13 +25,12 @@ const start = ()=>{
   background-color: #211b1d;
 }
 .start {
-  width: 140px;
-  height: 140px;
+  width: 38vw;
+  height: 38vw;
   position: absolute;
-  top: 540px;
+  top: 130vw;
   left: 50vw;
   transform: translateX(-70px);
-  border-radius: 70px;
 }
 </style>
 

@@ -1,20 +1,78 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import {useRouter} from 'vue-router'
+import {debounce} from '@/utils/debounce'
+import axios from 'axios';
+const router = useRouter()
+
+const isShowCommit = ref(false)
+// 问题
+const ary = ref([])
+// 当前索引
+const currentIndex = ref(0)
+// 结果数组
+const result = ref<string[]>([])
+// 点击上一题
+const answerPrevious = ()=>{
+  if(currentIndex.value === 0){
+    return
+  }
+  currentIndex.value -= 1
+}
+
+const answerSelect = debounce((e)=>{
+  if(e.target.getAttribute("data_id")){
+    result.value[currentIndex.value] = e.target.getAttribute("data_id")
+    if(currentIndex.value === ary.value.length-1){
+      console.log(result.value)
+      isShowCommit.value = true
+      // router.push({
+      //   path: '/finish'
+      // })
+      return
+    }
+    currentIndex.value += 1
+  }
+},200)
+const answerCommit = ()=>{
+  console.log(1)
+  console.log(result.value.join('#'))
+    router.push({
+    path: '/finish'
+  })
+}
+onMounted(()=>{
+  axios.get("https://nanguimi.zhenxinzhenyi.cn/api/testing/question").then(res=>{
+    ary.value = res.data.data
+  })
+  // 页面加载重置
+  currentIndex.value = 0
+  result.value = []
+  isShowCommit.value = false
+})
+</script>
 <template>
     <div class="answer_swiper">
+      <div class="imgbg" :style="isShowCommit?'':'background:none;'">
         <div class="answer_container">
             <section class="answer_qustion">
-                <span>所有的罪名，让我最讨厌的是欺骗发送到发的说法</span>
-                <div class="answer_previous">上一题</div>
-                <div class="answer_progress">1/27</div>
+                <span>{{ary[currentIndex]}}</span>
+                <div class="answer_previous" @click="answerPrevious">上一题</div>
+                <div class="answer_progress">{{Number(currentIndex)+1}}/{{ary.length}}</div>
             </section>
-            <section class="answer_select">
-                <div class="answer-item">完全不符合</div>
-                <div class="answer-item">比较不符合</div>
-                <div class="answer-item">不确定</div>
-                <div class="answer-item">比较符合</div>
-                <div class="answer-item">完全符合</div>
+            <section class="answer_select" @click="answerSelect">
+                <div class="answer-item" data_id="1" :class="result[currentIndex]=='1'?'active':''">完全不符合</div>
+                <div class="answer-item" data_id="2" :class="result[currentIndex]=='2'?'active':''">比较不符合</div>
+                <div class="answer-item" data_id="3" :class="result[currentIndex]=='3'?'active':''">不确定</div>
+                <div class="answer-item" data_id="4" :class="result[currentIndex]=='4'?'active':''">比较符合</div>
+                <div class="answer-item" data_id="5" :class="result[currentIndex]=='5'?'active':''">完全符合</div>
             </section>
         </div>
+        <div class="answer_commit" @click="answerCommit" :style="isShowCommit?'':'display:none;'">
+
+        </div>
+      </div>
+
     </div>
 </template>
 <style lang="scss" scoped>
@@ -32,15 +90,32 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 1.4rem;
-  color: #d4ccff;
+  padding: 7vw;
+  color: white;
+}
+.imgbg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url(@/assets/commit.png);
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.answer_commit {
+  width: 64vw;
+  height: 14vw;
+  position: absolute;
+  bottom: 8vw;
+  left: 50vw;
+  transform: translateX(-32vw);
 }
 .answer_qustion {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  height: 240px;
-  margin-top: 50px;
+  height: 65vw;
+  margin-top: 7vw;
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -49,32 +124,38 @@
 }
 .answer_previous {
     position: absolute;
-    bottom: 20px;
+    bottom: 22px;
     left: 20px;
     font-size: 16px;
 }
 .answer_progress {
     position: absolute;
-    bottom: 20px;
+    bottom: 22px;
     right: 20px;
     font-size: 16px;
 }
 .answer_select {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 7vw;
 }
 .answer-item {
   width: 100%;
-  height: 2rem;
-  border-radius: 0.3rem;
-  background-color: #25fcbc;
-  margin: 0.5rem 0;
-  line-height: 2rem;
-  font-size: 0.8rem;
-  color: black;
+  height: 10vw;
+  border-radius: 2vw;
+  background-color: #233135;
+  margin: 3vw 0;
+  line-height: 10vw;
+  font-size: 16px;
+  color: white;
+  cursor:pointer;
 }
 .answer-item:active {
-  background-color: green;
+  background-color: #1efad5;
+  color: white;
+}
+
+.active {
+  background-color: #1efad5;
   color: white;
 }
 </style>
