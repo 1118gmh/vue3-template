@@ -23,6 +23,7 @@ const singleYesAnswer = ()=>{
 .single_wrapper {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   background-image: url(../assets/single.jpg);
   background-size: 100%;
   background-repeat: no-repeat;

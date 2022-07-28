@@ -1,5 +1,20 @@
 <script lang="ts" setup>
 import {useRouter} from 'vue-router'
+import imgList from '@/assets/imgList'
+import { ref } from 'vue';
+console.log(imgList)
+const count = ref(0)
+const loading = document.querySelector('.loading')
+imgList.forEach(img => {
+  let image = new Image();
+  image.onload = ()=>{
+    count.value ++
+    console.log(loading)
+    loading.innerHTML = count.value
+    console.log(count.value)
+  }
+  image.src = img
+})
 const router = useRouter()
 // 跳转single页
 const start = ()=>{
@@ -19,6 +34,7 @@ const start = ()=>{
 .start_wrapper {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   background-image: url(../assets/start.jpg);
   background-repeat: no-repeat;
   background-size: 100%;
@@ -32,5 +48,6 @@ const start = ()=>{
   left: 50vw;
   transform: translateX(-70px);
 }
+
 </style>
 

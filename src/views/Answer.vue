@@ -3,6 +3,10 @@ import { onMounted, ref } from 'vue';
 import {useRouter} from 'vue-router'
 import {debounce} from '@/utils/debounce'
 import axios from 'axios';
+
+// import {useTestStore} from '../store/Test'
+// const Test = useTestStore()
+
 const router = useRouter()
 
 const isShowCommit = ref(false)
@@ -35,10 +39,12 @@ const answerSelect = debounce((e)=>{
   }
 },200)
 const answerCommit = ()=>{
-  console.log(1)
-  console.log(result.value.join('#'))
-    router.push({
-    path: '/finish'
+  console.log(result.value.join('|'))
+  // Test.data = result.value.join('|')
+  sessionStorage.setItem('data',result.value.join('|'))
+  // console.log(Test,'Test')
+  router.push({
+    path: '/gender'
   })
 }
 onMounted(()=>{
@@ -79,6 +85,7 @@ onMounted(()=>{
 .answer_swiper {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   background-image: url(../assets/answer.jpg);
   background-size: 100%;
   background-repeat: no-repeat;
