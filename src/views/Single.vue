@@ -30,17 +30,17 @@ const singleYesAnswer = ()=>{
   background-color: #211b1d;
 }
 .single_no {
-  width: 150px;
-  height: 230px;
+  width: 35vw;
+  height: 55vw;
   position: absolute;
-  top: 340px;
-  left: 47px;
+  top: 82vw;
+  left: 12vw;
 }
 .single_yes {
-  width: 150px;
-  height: 230px;
+  width: 35vw;
+  height: 55vw;
   position: absolute;
-  top: 340px;
-  left: 215px;
+  top: 82vw;
+  right: 12vw;
 }
 </style>

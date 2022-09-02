@@ -10,7 +10,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/loading"
+      redirect: "/start"
     },{
       path: "/loading",
       name: "Loading",
@@ -40,11 +40,6 @@ const router = createRouter({
       path: "/finish",
       name: "Finish",
       component: () => import("@/views/Finish.vue"),
-    },
-    {
-      path: "/gender",
-      name: "Gender",
-      component: () => import("@/views/Gender.vue"),
     },
     // {
     //   path: "/index",

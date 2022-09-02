@@ -1,13 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import VitePluginElementPlus from 'vite-plugin-element-plus';
 import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
   return defineConfig({
     base: './',
-    plugins: [vue(), VitePluginElementPlus({})],
+    plugins: [vue()],
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),

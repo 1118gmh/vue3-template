@@ -59,10 +59,10 @@ imgList.forEach(img => {
   height: 100%;
   overflow: hidden;
   box-sizing: border-box;
-  background-image: linear-gradient(45deg,#00BFFF 0%,#00BFFF 25%,#1dfad9 25%,#1dfad9 50%,#00BFFF 50%,#00BFFF 75%, #1dfad9 75%,#1dfad9 100%);
+  background-image: linear-gradient(45deg,#00BFFF 0,#00BFFF 25%,#1dfad9 0,#1dfad9 50%,#00BFFF 0,#00BFFF 75%, #1dfad9 75%);
   border-radius: 24px;
   animation: panoramic 20s linear infinite;
-  background-size: 32px 100%;
+  background-size: 20px 20px;
 }
 @keyframes panoramic{
   to {

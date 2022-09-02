@@ -7,12 +7,10 @@
     "build-tsc": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "build": "vite build"
-    
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "pinia": "^2.0.13",
-    "vite-plugin-element-plus": "0.0.9",
+    "swiper": "^8.3.2",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },

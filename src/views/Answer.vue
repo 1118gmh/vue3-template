@@ -3,9 +3,10 @@ import { onMounted, ref } from 'vue';
 import {useRouter} from 'vue-router'
 import {debounce} from '@/utils/debounce'
 import axios from 'axios';
-
-// import {useTestStore} from '../store/Test'
-// const Test = useTestStore()
+import uncheckedBoyImg from '@/assets/uncheckedBoy.png'
+import uncheckedGirlImg from '@/assets/uncheckedGirl.png'
+import checkedBoyImg from '@/assets/checkedBoy.png'
+import checkedGirlImg from '@/assets/checkedGirl.png'
 
 const router = useRouter()
 
@@ -16,6 +17,61 @@ const ary = ref([])
 const currentIndex = ref(0)
 // 结果数组
 const result = ref<string[]>([])
+
+const boyImg = ref(uncheckedBoyImg)
+const girlImg = ref(uncheckedGirlImg)
+
+const tip = ref('')
+
+const gender = ref('')
+const isMask = ref(false)
+const clickMask = () => {
+    isMask.value = false
+}
+// 跳转answer页
+const checkedBoy = ()=>{
+    boyImg.value = checkedBoyImg
+    girlImg.value = uncheckedGirlImg
+}
+const checkedGirl = ()=>{
+    boyImg.value = uncheckedBoyImg
+    girlImg.value = checkedGirlImg
+}
+const look = ()=>{
+    if(boyImg.value === checkedBoyImg){
+        gender.value = '1'
+    }else if(girlImg.value === checkedGirlImg) {
+        gender.value = '2'
+    }else {
+        gender.value = ''
+    }
+    sessionStorage.setItem('sex',gender.value)
+    if(gender.value === ''){
+        tip.value = '请选择性别'
+        const timer = setTimeout(()=>{
+            tip.value = ''
+            clearTimeout(timer)
+        },1000)
+        return
+    }
+    axios.post("https://nanguimi.zhenxinzhenyi.cn/api/testing/answer",{
+        sex: sessionStorage.getItem('sex'),
+        data: sessionStorage.getItem('data'),
+        platv:2
+    }).then((res)=>{
+        console.log(res)
+        if(res.data.code === 0){
+            sessionStorage.setItem('bgImg',res.data.data.img)
+            sessionStorage.setItem('osn',res.data.data.osn)
+            router.push({
+                path: "/finish"
+            })
+        }else {
+            console.log('error')
+        }
+    })
+
+}
 // 点击上一题
 const answerPrevious = ()=>{
   if(currentIndex.value === 0){
@@ -30,9 +86,6 @@ const answerSelect = debounce((e)=>{
     if(currentIndex.value === ary.value.length-1){
       console.log(result.value)
       isShowCommit.value = true
-      // router.push({
-      //   path: '/finish'
-      // })
       return
     }
     currentIndex.value += 1
@@ -40,26 +93,28 @@ const answerSelect = debounce((e)=>{
 },200)
 const answerCommit = ()=>{
   console.log(result.value.join('|'))
-  // Test.data = result.value.join('|')
   sessionStorage.setItem('data',result.value.join('|'))
-  // console.log(Test,'Test')
-  router.push({
-    path: '/gender'
-  })
+  isMask.value = true
+  
 }
 onMounted(()=>{
-  axios.get("https://nanguimi.zhenxinzhenyi.cn/api/testing/question").then(res=>{
+  axios.get("https://nanguimi.zhenxinzhenyi.cn/api/testing/question?platv=2").then(res=>{
     ary.value = res.data.data
   })
   // 页面加载重置
   currentIndex.value = 0
   result.value = []
   isShowCommit.value = false
+  const data = sessionStorage.getItem('data')
+  if(data){
+    result.value = data.split('|')
+    currentIndex.value = result.value.length-1
+    isShowCommit.value = true
+  }
 })
 </script>
 <template>
     <div class="answer_swiper">
-      <div class="imgbg" :style="isShowCommit?'':'background:none;'">
         <div class="answer_container">
             <section class="answer_qustion">
                 <span>{{ary[currentIndex]}}</span>
@@ -67,21 +122,42 @@ onMounted(()=>{
                 <div class="answer_progress">{{Number(currentIndex)+1}}/{{ary.length}}</div>
             </section>
             <section class="answer_select" @click="answerSelect">
-                <div class="answer-item" data_id="1" :class="result[currentIndex]=='1'?'active':''">完全不符合</div>
-                <div class="answer-item" data_id="2" :class="result[currentIndex]=='2'?'active':''">比较不符合</div>
-                <div class="answer-item" data_id="3" :class="result[currentIndex]=='3'?'active':''">不确定</div>
-                <div class="answer-item" data_id="4" :class="result[currentIndex]=='4'?'active':''">比较符合</div>
-                <div class="answer-item" data_id="5" :class="result[currentIndex]=='5'?'active':''">完全符合</div>
+                <div class="answer-item" data_id="5" :class="result[currentIndex]=='5'?'active':''">非常同意</div>
+                <div class="answer-item" data_id="4" :class="result[currentIndex]=='4'?'active':''">比较同意</div>
+                <div class="answer-item" data_id="3" :class="result[currentIndex]=='3'?'active':''">差不多同意</div>
+                <div class="answer-item" data_id="2" :class="result[currentIndex]=='2'?'active':''">一点点同意</div>
+                <div class="answer-item" data_id="1" :class="result[currentIndex]=='1'?'active':''">不同意</div>
             </section>
-        </div>
-        <div class="answer_commit" @click="answerCommit" :style="isShowCommit?'':'display:none;'">
+            <div class="answer_commit" @click="answerCommit" :style="isShowCommit?'':'display:none;'">
+                <img src="@/assets/commit.png" alt="" style="width: ;100%;height:100%;">
+            </div>
 
-        </div>
+        
       </div>
-
+      <div class="gender_box" :style="isMask?'display: flex;':'display: none;'">
+        <span class="gender_title">恭喜！完成评测！</span>
+        <span class="gender_letter">请按照真是性别选择，影响测试结果</span>
+        <div class="gender_select">
+            <img :src="boyImg" alt="" class="gender_unchecked_girl" @click="checkedBoy">
+            <img :src="girlImg" alt="" class="gender_unchecked_girl" @click="checkedGirl">
+        </div>
+        <div class="gender_look" @click="look">查看报告</div>
+        <div style="color: #f56c6c;font-size:3vw;">{{tip}}</div>
+    </div>
+    <div class="finish_mask" :style="isMask ? 'display:block;' : 'display:none;'" @click="clickMask"></div>
     </div>
 </template>
 <style lang="scss" scoped>
+.finish_mask {
+    z-index: 98;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+}
+
 .answer_swiper {
   width: 100vw;
   height: 100vh;
@@ -90,6 +166,7 @@ onMounted(()=>{
   background-size: 100%;
   background-repeat: no-repeat;
   background-color: #211b1d;
+  position: relative;
 }
 .answer_container {
   display: flex;
@@ -110,12 +187,8 @@ onMounted(()=>{
   background-size: 100%;
 }
 .answer_commit {
-  width: 64vw;
-  height: 14vw;
-  position: absolute;
-  bottom: 8vw;
-  left: 50vw;
-  transform: translateX(-32vw);
+  width: 100vw;
+  height: 18vw;
 }
 .answer_qustion {
   position: relative;
@@ -123,7 +196,7 @@ onMounted(()=>{
   width: 100%;
   height: 65vw;
   margin-top: 7vw;
-  padding: 20px;
+  padding: 15vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,7 +215,7 @@ onMounted(()=>{
     font-size: 16px;
 }
 .answer_select {
-  width: 100%;
+  width: 88%;
   margin-top: 7vw;
 }
 .answer-item {
@@ -164,5 +237,57 @@ onMounted(()=>{
 .active {
   background-color: #1efad5;
   color: white;
+}
+.gender_box {
+  z-index: 99;
+    position: absolute;
+    top: 50%;
+    left: 10vw;
+    transform: translateY(-35vw);
+    width: 80vw;
+    height: 70vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #233334;
+    border-radius: 10vw;
+}
+.gender_title {
+  font-size: 5vw;
+  font-weight: 600;
+  color: #cefffb;
+  margin-top: 6vw;
+}
+.gender_letter {
+  font-size: 4vw;
+  font-weight: 500;
+  color: #cefffb;
+  margin-top: 2vw;
+}
+.gender_select {
+    width: 50vw;
+    height: 25vw;
+    display: flex;
+    // background: blue;
+    margin-top: 5vw;
+}
+.gender_unchecked_boy {
+    width: 25vw;
+    height: 25vw;
+}
+.gender_unchecked_girl {
+    width: 25vw;
+    height: 25vw;
+}
+.gender_look {
+    width: 50vw;
+    height: 10vw;
+    background-color: #1bf8df;
+    font-size: 4.2vw;
+    font-weight: 600;
+    text-align: center;
+    line-height: 10vw;
+    border-radius: 5vw;
+    margin-top: 2vw;
 }
 </style>

@@ -4,16 +4,124 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>人格爱情测评</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" name="viewport" />
+    <title>恋爱答案书</title>
     <style>
       html,body{
         margin: 0;
         padding: 0;
-        
       }
+
     </style>
   </head>
-  <body>
+  <body ontouchstart>
+    <!-- Soul Tracking -->
+    <script>
+      ;(function () {
+        var script = document.getElementsByTagName("script")[0];
+        var newScript = document.createElement("script");
+        newScript.src = "https://ad-h5-cdn.soulapp.cn/ad-sdk-v1.umd.js";
+        script.parentNode.insertBefore(newScript, script)
+      })()
+    </script>
+    <!-- End Soul Tracking -->
+    <!-- <script src="./src/utils/html2canvas.min.js"></script> -->
+    <!-- <script>
+      function ToImage(el){
+          html2canvas(document.querySelector(el),{
+          
+          }).then(canvas=>{
+          let tempImg = new Image()
+          tempImg.src = canvas.toDataURL("image/jpg")  
+          // let dataURL = canvas.toDataURL("image/jpg");
+            // console.log(dataURL)
+            var eleLink = document.createElement("a");
+                  eleLink.href = tempImg.src; // 转换后的图片地址
+                  eleLink.download = name;
+                  document.body.appendChild(eleLink);
+                  // 触发点击
+                  eleLink.click();
+                  // 然后移除
+                  document.body.removeChild(eleLink)
+
+        })
+      }
+      function aaaa(url){
+        var a = document.createElement('a')
+        fetch(url).then(res=>{
+          res.blob().then(blob=>{
+            a.href = URL.createObjectURL(blob)
+            console.log(a.href)
+            a.download = 'a'
+            a.click()
+          })
+        })
+      }
+      function downloadImage(imgsrc, name) {//下载图片地址和图片名
+            var image = new Image();
+            // 解决跨域 Canvas 污染问题
+            image.setAttribute("crossOrigin", "anonymous");
+            image.onload = function() {
+                var canvas = document.createElement("canvas");
+                canvas.width = image.width;
+                canvas.height = image.height;
+                var context = canvas.getContext("2d");
+                context.drawImage(image, 0, 0, image.width, image.height);
+                var url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+                var a = document.createElement("a"); // 生成一个a元素
+                var event = new MouseEvent("click"); // 创建一个单击事件
+                a.download = name || "photo"; // 设置图片名称
+                a.href = url; // 将生成的URL设置为a.href属性
+                a.dispatchEvent(event); // 触发a的单击事件
+            };
+            image.src = imgsrc;
+        }
+       function dataURLToBlob (dataurl) {
+        let arr = dataurl.split(',');
+        let mime = arr[0].match(/:(.*?);/)[1];
+        let bstr = atob(arr[1]);
+        let n = bstr.length;
+        let u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+
+       function saveImage (divText, imgText) {
+      let canvasID = document.querySelector(divText);
+      let a = document.createElement('a');
+      html2canvas(canvasID).then(canvas => {
+        let dom = document.body.appendChild(canvas);
+        dom.style.display = 'none';
+        a.style.display = 'none';
+        document.body.removeChild(dom);
+        let blob = dataURLToBlob(dom.toDataURL('image/png'));
+        a.setAttribute('href', URL.createObjectURL(blob));
+        //这块是保存图片操作  可以设置保存的图片的信息
+        a.setAttribute('download', imgText + '.png');
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(blob);
+        document.body.removeChild(a);
+      });
+    }
+    </script> -->
+    <!-- <script>
+      document.documentElement.addEventListener('touchstart', function (event) {
+  if (event.touches.length > 1) {
+    event.preventDefault();
+  }
+}, false);
+var lastTouchEnd = 0;
+document.documentElement.addEventListener('touchend', function (event) {
+  var now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+    </script> -->
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
